@@ -429,8 +429,7 @@ class _SimpleProdState extends State<SimpleProd> {
                           .ref()
                           .child(
                               "product_pics/$prod_Id/images/img0_120x120.jpg");
-                               await Future.delayed(
-                                      const Duration(seconds: 2), () {}),
+                      await Future.delayed(const Duration(seconds: 2), () {});
                       try {
                         await ref
                             .getDownloadURL()
