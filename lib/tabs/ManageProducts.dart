@@ -35,27 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final productEntries = Provider.of<List<ProductEntry>>(context);
-    Future<bool> _onBackPressed() {
-      return showDialog(
-            context: context,
-            builder: (context) => new AlertDialog(
-              title: new Text('Are you sure?'),
-              content: new Text('Do you want to exit ?'),
-              actions: <Widget>[
-                new GestureDetector(
-                  onTap: () => Navigator.of(context).pop(false),
-                  child: Text("NO"),
-                ),
-                SizedBox(height: 16),
-                new GestureDetector(
-                  onTap: () => Navigator.of(context).pop(true),
-                  child: Text("YES"),
-                ),
-              ],
-            ),
-          ) ??
-          false;
-    }
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -77,27 +56,32 @@ class _MyHomePageState extends State<MyHomePage> {
               desiredItemWidth: 100,
               minSpacing: 10,
               children: [for (var i in productEntries) i].map((i) {
-                return Container(
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2.0,
+                return GestureDetector(
+                  onTap: () {
+                    _modalBottomSheetMenu(context, i);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 2.0,
+                      ),
+                    ]),
+                    width: 100,
+                    alignment: Alignment(0, 0),
+                    child: Column(
+                      children: [
+                        Image.network(i.image.toString(),
+                            width: 120, height: 120, fit: BoxFit.cover),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              i.title.toString(),
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            )),
+                      ],
                     ),
-                  ]),
-                  width: 100,
-                  alignment: Alignment(0, 0),
-                  child: Column(
-                    children: [
-                      Image.network(i.image.toString(),
-                          width: 120, height: 120, fit: BoxFit.cover),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            i.title.toString(),
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )),
-                    ],
                   ),
                 );
               }).toList()),
@@ -135,8 +119,8 @@ showAlertDialog(BuildContext context) {
       ),
     ),
     onPressed: () async {
+      await Future.delayed(const Duration(milliseconds: 150), () {});
       Navigator.of(context, rootNavigator: true).pop();
-      await Future.delayed(const Duration(milliseconds: 200), () {});
       Navigator.push(context, SlideRightRoute(page: SimPro()));
     },
   );
@@ -273,4 +257,73 @@ class SizeRoute extends PageRouteBuilder {
             ),
           ),
         );
+}
+
+void _modalBottomSheetMenu(context, i) {
+  showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      builder: (builder) {
+        return new Container(
+            height: 350.0,
+            color: Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.network(i.image.toString(),
+                          width: 120, height: 120, fit: BoxFit.cover),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                i.title.toString(),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                child: Text(i.cato.toString(),
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
+                                    )),
+                              ),
+                            ),
+                            Text(
+                              i.price.toString(),
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    i.title.toString(),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    i.title.toString(),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ));
+      });
 }

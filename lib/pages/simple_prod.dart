@@ -50,14 +50,13 @@ class _SimpleProdState extends State<SimpleProd> {
     final pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     var tstyle = TextStyle(
-        color: Colors.black,
         fontFamily: 'Roboto-Regular',
         decoration: TextDecoration.underline,
         decorationColor: Colors.orange,
         decorationThickness: 2,
         fontSize: 20);
     pr.style(
-        message: 'Downloading file...',
+        message: 'Uploading...',
         borderRadius: 10.0,
         backgroundColor: Colors.white,
         progressWidget: CircularProgressIndicator(),
@@ -106,7 +105,6 @@ class _SimpleProdState extends State<SimpleProd> {
                         if (images.length < 2) {
                           return 'Two or more images required.';
                         }
-
                         return null;
                       }
                     ],
@@ -200,7 +198,7 @@ class _SimpleProdState extends State<SimpleProd> {
                     validators: [
                       // FormBuilderValidators.numeric(),
 
-                      FormBuilderValidators.minLength(20, allowEmpty: false),
+                      FormBuilderValidators.minLength(20),
                     ],
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -231,7 +229,6 @@ class _SimpleProdState extends State<SimpleProd> {
                         // ),
                       ),
                       validators: [
-                        FormBuilderValidators.required(),
                         FormBuilderValidators.numeric(),
                         FormBuilderValidators.max(70000),
                       ],
@@ -359,6 +356,17 @@ class _SimpleProdState extends State<SimpleProd> {
                       labelText: 'Validity',
                     ),
                   ),
+                  FormBuilderDropdown(
+                    attribute: "gender",
+                    decoration: InputDecoration(labelText: "Gender"),
+                    // initialValue: 'Male',
+                    hint: Text('Select Gender'),
+                    validators: [FormBuilderValidators.required()],
+                    items: ['Male', 'Female', 'Other']
+                        .map((gender) => DropdownMenuItem(
+                            value: gender, child: Text("$gender")))
+                        .toList(),
+                  ),
                   FormBuilderSwitch(
                     label: Text('I Accept the tems and conditions'),
                     attribute: 'accept_terms_switch',
@@ -474,7 +482,6 @@ class _SimpleProdState extends State<SimpleProd> {
                         "image": imgurl,
                       });
                       await pr.hide();
-                      Navigator.of(context, rootNavigator: true).pop();
                     } else {
                       print('validation failed');
                       // Firestore.instance
