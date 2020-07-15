@@ -94,6 +94,7 @@ class _SimpleProdState extends State<SimpleProd> {
                   FormBuilderImagePicker(
                     attribute: 'images',
                     decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                       labelText: 'Images',
                     ),
                     maxImages: 5,
@@ -165,6 +166,97 @@ class _SimpleProdState extends State<SimpleProd> {
                     ],
                   ),
                   SizedBox(height: 15),
+                  FormBuilderChoiceChip(
+                    selectedColor: Colors.grey[200],
+                    backgroundColor: Colors.white,
+                    attribute: "color",
+                    elevation: 0,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Product color',
+                    ),
+                    options: [
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.red),
+                        value: "red",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.redAccent),
+                        value: "light red",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.pink),
+                        value: "pink",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.pinkAccent),
+                        value: "light pink",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.orange),
+                        value: "orange",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.yellow[700]),
+                        value: "yellow",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.blue),
+                        value: "blue",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.lightBlue),
+                        value: "light blue",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.green),
+                        value: "green",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.lightGreen),
+                        value: "light green",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.purple),
+                        value: "purple",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.deepPurple),
+                        value: "dark purple",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.brown),
+                        value: "brown",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.yellow),
+                        value: "yellow",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Opacity(
+                            opacity: 0.4,
+                            child: Icon(
+                              Icons.lens,
+                              color: Colors.black12,
+                            )),
+                        value: "white",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.grey),
+                        value: "grey",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.blueGrey),
+                        value: "blue grey",
+                      ),
+                      FormBuilderFieldOption(
+                        child: Icon(Icons.lens, color: Colors.black),
+                        value: "black",
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 15),
                   FormBuilderTextField(
                     attribute: 'S_dis',
                     decoration: const InputDecoration(
@@ -198,7 +290,7 @@ class _SimpleProdState extends State<SimpleProd> {
                     validators: [
                       // FormBuilderValidators.numeric(),
 
-                      FormBuilderValidators.minLength(20),
+                      // FormBuilderValidators.minLength(20),
                     ],
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -213,7 +305,6 @@ class _SimpleProdState extends State<SimpleProd> {
                     ),
                   ),
                   SizedBox(height: 15),
-
                   FormBuilderTextField(
                       attribute: "price",
                       decoration: InputDecoration(
@@ -254,10 +345,11 @@ class _SimpleProdState extends State<SimpleProd> {
                         FormBuilderValidators.max(70000),
                       ],
                       keyboardType: TextInputType.number),
-                  SizedBox(height: 5),
+                  SizedBox(height: 15),
                   FormBuilderChoiceChip(
-                    attribute: 'choice_chip',
+                    attribute: 'delivery_vehicle',
                     decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                       labelText: 'Select delivery vehicle',
                     ),
                     options: [
@@ -321,7 +413,7 @@ class _SimpleProdState extends State<SimpleProd> {
                     onChanged: _onChanged,
                     validators: [
                       FormBuilderValidators.max(10),
-                      FormBuilderValidators.minLength(4),
+                      // FormBuilderValidators.minLength(4),
                     ],
                     maxLines: 1,
                   ),
@@ -339,7 +431,7 @@ class _SimpleProdState extends State<SimpleProd> {
                     onChanged: _onChanged,
                     validators: [
                       FormBuilderValidators.max(70),
-                      FormBuilderValidators.minLength(2),
+                      // FormBuilderValidators.minLength(2),
                     ],
                     keyboardType: TextInputType.multiline,
                     maxLines: 1,
@@ -356,22 +448,28 @@ class _SimpleProdState extends State<SimpleProd> {
                       labelText: 'Validity',
                     ),
                   ),
-                  FormBuilderDropdown(
-                    attribute: "gender",
-                    decoration: InputDecoration(labelText: "Gender"),
-                    // initialValue: 'Male',
-                    hint: Text('Select Gender'),
-                    validators: [FormBuilderValidators.required()],
-                    items: ['Male', 'Female', 'Other']
-                        .map((gender) => DropdownMenuItem(
-                            value: gender, child: Text("$gender")))
-                        .toList(),
-                  ),
-                  FormBuilderSwitch(
-                    label: Text('I Accept the tems and conditions'),
-                    attribute: 'accept_terms_switch',
-                    initialValue: false,
-                    onChanged: _onChanged,
+                  // FormBuilderDropdown(
+                  //   attribute: "gender",
+                  //   decoration: InputDecoration(labelText: "Gender"),
+                  //   // initialValue: 'Male',
+                  //   hint: Text('Select Gender'),
+                  //   validators: [FormBuilderValidators.required()],
+                  //   items: ['Male', 'Female', 'Other']
+                  //       .map((gender) => DropdownMenuItem(
+                  //           value: gender, child: Text("$gender")))
+                  //       .toList(),
+                  // ),
+                  FormBuilderCheckbox(
+                    leadingInput: true,
+                    attribute: 'accept_terms',
+                    label: Text(
+                        "I have read and agree to the terms and conditions"),
+                    validators: [
+                      FormBuilderValidators.requiredTrue(
+                        errorText:
+                            "You must accept terms and conditions to continue",
+                      ),
+                    ],
                   ),
                 ])),
           ),
@@ -436,7 +534,7 @@ class _SimpleProdState extends State<SimpleProd> {
                       StorageReference ref = FirebaseStorage.instance
                           .ref()
                           .child(
-                              "product_pics/$prod_Id/images/img0_120x120.jpg");
+                              "product_pics/$prod_Id/images/img0_512x512.jpg");
                       await Future.delayed(const Duration(seconds: 2), () {});
                       try {
                         await ref
@@ -480,8 +578,14 @@ class _SimpleProdState extends State<SimpleProd> {
                         "s_price":
                             data.fields['sales_price'].currentState.value,
                         "image": imgurl,
+                        "s_dis": data.fields['S_dis'].currentState.value,
+                        "f_dis": data.fields['F_dis'].currentState.value,
+                        "color": data.fields['color'].currentState.value,
+                        "del_vech":
+                            data.fields['delivery_vehicle'].currentState.value,
                       });
                       await pr.hide();
+                      Navigator.pop(context);
                     } else {
                       print('validation failed');
                       // Firestore.instance

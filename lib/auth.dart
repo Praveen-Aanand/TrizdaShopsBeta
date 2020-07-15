@@ -8,13 +8,13 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _db = Firestore.instance;
 
-  Observable<FirebaseUser> user; // firebase user
-  Observable<Map<String, dynamic>> profile; // custom user data in Firestore
+  Stream<FirebaseUser> user; // firebase user
+  Stream<Map<String, dynamic>> profile; // custom user data in Firestore
   PublishSubject loading = PublishSubject();
 
   // constructor
   AuthService() {
-    user = Observable(_auth.onAuthStateChanged);
+    user = (_auth.onAuthStateChanged);
 
     profile = user.switchMap((FirebaseUser u) {
       if (u != null) {
@@ -24,7 +24,7 @@ class AuthService {
             .snapshots()
             .map((snap) => snap.data);
       } else {
-        return Observable.just({});
+        return null;
       }
     });
   }
@@ -72,7 +72,6 @@ class AuthService {
       return e.toString();
     }
   }
-
 }
 
 final AuthService authService = AuthService();

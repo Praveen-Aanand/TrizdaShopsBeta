@@ -4,13 +4,17 @@ class ProductEntry {
   final String cato;
   final String title;
   final String s_dis;
+  final String f_dis;
   final String price;
+  final String s_price;
   final String image;
   final String documentId;
   ProductEntry(
       {this.cato,
       this.title,
       this.s_dis,
+      this.f_dis,
+      this.s_price,
       this.documentId,
       this.price,
       this.image});
@@ -20,7 +24,9 @@ class ProductEntry {
       'cato': cato,
       'title': title,
       's_dis': s_dis,
+      'f_dis': f_dis,
       "price": price,
+      "s_price": s_price,
       "docid": documentId,
       "image": image
     };
@@ -33,6 +39,9 @@ class ProductEntry {
       cato: doc.data['cato'],
       title: doc.data['title'],
       s_dis: doc.data['s_dis'],
+      f_dis: doc.data['f_dis'],
+      price: doc.data['price'],
+      s_price: doc.data['s_price'],
       documentId: doc.documentID,
       image: doc.data['image'],
     );
