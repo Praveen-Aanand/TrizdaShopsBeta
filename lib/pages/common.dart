@@ -35,7 +35,8 @@ class _CommonPageState extends State<CommonPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Algolia Search"),
+        title: Text("Common products"),
+        backgroundColor: Colors.white,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -45,16 +46,15 @@ class _CommonPageState extends State<CommonPage> {
             Text("Search"),
             TextField(
               controller: _searchText,
-              decoration: InputDecoration(hintText: "Search query here..."),
+              decoration: InputDecoration(hintText: "Search products"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 FlatButton(
-                  color: Colors.blue,
                   child: Text(
                     "Search",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.orange),
                   ),
                   onPressed: _search,
                 ),

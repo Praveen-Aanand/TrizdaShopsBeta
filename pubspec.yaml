@@ -39,11 +39,17 @@ dependencies:
   cached_network_image: ^2.2.0+1
   algolia: ^0.1.7
   stopper: ^1.0.1
+  url_launcher: ^5.5.0
 
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

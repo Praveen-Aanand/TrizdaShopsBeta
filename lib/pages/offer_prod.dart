@@ -27,7 +27,7 @@ class _SimProState extends State<SimPro> {
               child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Upload product',
+                    'Offer product',
                     style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                   ))),
           elevation: 0.5,

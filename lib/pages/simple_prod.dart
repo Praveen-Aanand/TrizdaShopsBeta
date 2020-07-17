@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,10 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'data.dart';
 import 'package:intl/intl.dart';
+import 'package:stopper/stopper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SimPro extends StatefulWidget {
   SimPro({Key key, this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -45,8 +47,10 @@ class SimpleProd extends StatefulWidget {
 class _SimpleProdState extends State<SimpleProd> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final ValueChanged _onChanged = (val) => print(val);
+  List<Widget> commentWidgets = [];
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     final pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     var tstyle = TextStyle(
@@ -348,15 +352,24 @@ class _SimpleProdState extends State<SimpleProd> {
                   SizedBox(height: 15),
                   FormBuilderChoiceChip(
                     attribute: 'delivery_vehicle',
+                    spacing: 5,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Select delivery vehicle',
                     ),
                     options: [
                       FormBuilderFieldOption(
-                          value: '2', child: Text('two wheeler')),
+                          value: '2',
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text('two wheeler'),
+                          )),
                       FormBuilderFieldOption(
-                          value: '4', child: Text('four wheeler')),
+                          value: '4',
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text('four wheeler'),
+                          )),
                     ],
                     validators: [
                       FormBuilderValidators.required(),
@@ -441,7 +454,7 @@ class _SimpleProdState extends State<SimpleProd> {
                     attribute: 'date_range',
                     firstDate: DateTime.now(),
                     lastDate: DateTime.now().add(Duration(days: 20)),
-                    format: DateFormat('dd-mm-yyyy'),
+                    format: DateFormat('dd-MM-yyyy'),
                     onChanged: _onChanged,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -459,171 +472,312 @@ class _SimpleProdState extends State<SimpleProd> {
                   //           value: gender, child: Text("$gender")))
                   //       .toList(),
                   // ),
+                  SizedBox(height: 15),
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80.0)),
+                    padding: EdgeInsets.all(0.0),
+                    color: Theme.of(context).accentColor,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xfffc7f03), Color(0xfffabd05)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0)),
+                      child: Container(
+                        constraints:
+                            BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Reset',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      showStopper(
+                          context: context,
+                          stops: [0.5 * height, height],
+                          builder:
+                              (context, scrollController, scrollPhysics, stop) {
+                            return Column(
+                              children: [
+                                TextField(),
+                                Expanded(
+                                    child: new ListView(
+                                  children: commentWidgets,
+                                )),
+                                RaisedButton(
+                                    child: Text("dhd"),
+                                    onPressed: () {
+                                      setState(() {
+                                        commentWidgets.add(
+                                          Text("kkk"),
+                                        );
+                                      });
+                                    })
+                              ],
+                            );
+                          });
+                    },
+                  ),
+
+                  SizedBox(height: 15),
                   FormBuilderCheckbox(
+                    decoration: InputDecoration(
+                      border: null,
+                    ),
                     leadingInput: true,
                     attribute: 'accept_terms',
-                    label: Text(
-                        "I have read and agree to the terms and conditions"),
+                    tristate: false,
+                    label: new RichText(
+                      textScaleFactor: 2,
+                      text: new TextSpan(
+                        children: [
+                          new TextSpan(
+                            text: 'I have read and agree to the trizda`s ',
+                            style: new TextStyle(color: Colors.black),
+                          ),
+                          new TextSpan(
+                            text: 'terms and conditions',
+                            style: new TextStyle(color: Colors.blue),
+                            recognizer: new TapGestureRecognizer()
+                              ..onTap = () {
+                                launch(
+                                    'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
                     validators: [
                       FormBuilderValidators.requiredTrue(
                         errorText:
-                            "You must accept terms and conditions to continue",
+                            "You must accept terms and conditions of trizda to continue",
                       ),
                     ],
                   ),
                 ])),
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: MaterialButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80.0)),
+                    padding: EdgeInsets.all(0.0),
+                    color: Theme.of(context).accentColor,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xfffc7f03), Color(0xfffabd05)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0)),
+                      child: Container(
+                        constraints:
+                            BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Reset',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      _fbKey.currentState.reset();
+                    },
                   ),
-                  onPressed: () async {
-                    var data = _fbKey.currentState;
-                    StorageReference storageReference =
-                        await FirebaseStorage.instance.ref();
-                    var _images = data.fields['images'].currentState.value;
-                    var imgurl = null;
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80.0)),
+                    padding: EdgeInsets.all(0.0),
+                    color: Theme.of(context).accentColor,
+                    child: Ink(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xfffc7f03), Color(0xfffabd05)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0)),
+                      child: Container(
+                        constraints:
+                            BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      var data = _fbKey.currentState;
+                      StorageReference storageReference =
+                          await FirebaseStorage.instance.ref();
+                      var _images = data.fields['images'].currentState.value;
+                      var imgurl = null;
 
-                    DocumentReference ref = Firestore.instance
-                        .collection("my_collection")
-                        .document();
-                    String prod_Id = ref.documentID;
+                      DocumentReference ref = Firestore.instance
+                          .collection("my_collection")
+                          .document();
+                      String prod_Id = ref.documentID;
 
-                    //function to call
+                      //function to call
 
-                    addImageToFirebase(index, image) async {
-                      //CreateRefernce to path.
-                      StorageReference ref =
-                          storageReference.child("product_pics/$prod_Id/");
-                      print("hello");
-                      StorageUploadTask storageUploadTask =
-                          ref.child("img$index.jpg").putFile(image);
+                      addImageToFirebase(index, image) async {
+                        //CreateRefernce to path.
+                        StorageReference ref =
+                            storageReference.child("product_pics/$prod_Id/");
+                        print("hello");
+                        StorageUploadTask storageUploadTask =
+                            ref.child("img$index.jpg").putFile(image);
 
-                      if (storageUploadTask.isSuccessful ||
-                          storageUploadTask.isComplete) {
-                        final String url = await ref.getDownloadURL();
-                        print("The download URL is " + url);
-                      } else if (storageUploadTask.isInProgress) {
-                        storageUploadTask.events.listen((event) {
-                          double percentage = 100 *
-                              (event.snapshot.bytesTransferred.toDouble() /
-                                  event.snapshot.totalByteCount.toDouble());
-                          print("THe percentage " + percentage.toString());
+                        if (storageUploadTask.isSuccessful ||
+                            storageUploadTask.isComplete) {
+                          final String url = await ref.getDownloadURL();
+                          print("The download URL is " + url);
+                        } else if (storageUploadTask.isInProgress) {
+                          storageUploadTask.events.listen((event) {
+                            double percentage = 100 *
+                                (event.snapshot.bytesTransferred.toDouble() /
+                                    event.snapshot.totalByteCount.toDouble());
+                            print("THe percentage " + percentage.toString());
+                          });
+
+                          StorageTaskSnapshot storageTaskSnapshot =
+                              await storageUploadTask.onComplete;
+                          var downloadUrl1 =
+                              await storageTaskSnapshot.ref.getDownloadURL();
+                          print("Download URL " + downloadUrl1.toString());
+                          return downloadUrl1.toString();
+                        } else {
+                          //Catch any cases here that might come up like canceled, interrupted
+                        }
+                      }
+
+                      //get url of thumnail
+                      getUrl() async {
+                        // ignore: avoid_init_to_null
+                        String url = null;
+                        StorageReference ref = FirebaseStorage.instance
+                            .ref()
+                            .child(
+                                "product_pics/$prod_Id/images/img0_512x512.jpg");
+                        await Future.delayed(const Duration(seconds: 2), () {});
+                        try {
+                          await ref
+                              .getDownloadURL()
+                              .then((value) => {url = value.toString()})
+                              .catchError((error) async => {
+                                    await Future.delayed(
+                                        const Duration(seconds: 2), () {}),
+                                    await ref
+                                        .getDownloadURL()
+                                        .then(
+                                            (value) => {url = value.toString()})
+                                        .catchError((error) async => {
+                                              await Future.delayed(
+                                                  const Duration(seconds: 5),
+                                                  () {}),
+                                              url = (await ref.getDownloadURL())
+                                                  .toString()
+                                            })
+                                  });
+                        } on Exception catch (_) {
+                          print('never reached');
+                        }
+
+                        return url;
+                      }
+
+                      if (data.saveAndValidate()) {
+                        await pr.show();
+                        for (var i = 0; i < _images.length; i++) {
+                          await addImageToFirebase(i, _images[i]);
+                        }
+                        imgurl = await getUrl();
+                        print(_fbKey.currentState.value);
+                        await Firestore.instance
+                            .collection('products')
+                            .document("$prod_Id")
+                            .setData({
+                          "title":
+                              data.fields['product_name'].currentState.value,
+                          "cato": data.fields['category'].currentState.value,
+                          "price": data.fields['price'].currentState.value,
+                          "s_price":
+                              data.fields['sales_price'].currentState.value,
+                          "image": imgurl,
+                          "s_dis": data.fields['S_dis'].currentState.value,
+                          "f_dis": data.fields['F_dis'].currentState.value,
+                          "color": data.fields['color'].currentState.value,
+                          "del_vech": data
+                              .fields['delivery_vehicle'].currentState.value,
                         });
-
-                        StorageTaskSnapshot storageTaskSnapshot =
-                            await storageUploadTask.onComplete;
-                        var downloadUrl1 =
-                            await storageTaskSnapshot.ref.getDownloadURL();
-                        print("Download URL " + downloadUrl1.toString());
-                        return downloadUrl1.toString();
+                        await pr.hide();
+                        Navigator.pop(context);
                       } else {
-                        //Catch any cases here that might come up like canceled, interrupted
+                        print('validation failed');
+                        // Firestore.instance
+                        //     .collection('products')
+                        //     .document("there")
+                        //     .setData({
+                        //   "prod_n":
+                        //       data.fields['product_name'].currentState.value,
+                        //   "cato": data.fields['category'].currentState.value,
+                        //   "price": data.fields['price'].currentState.value,
+                        //   "s_price":
+                        //       data.fields['sales_price'].currentState.value,
+                        //   "image": imgurl,
+                        //   // "clr":data.fields['color_picker'].currentState.value,
+                        // });
                       }
-                    }
-
-                    //get url of thumnail
-                    getUrl() async {
-                      // ignore: avoid_init_to_null
-                      String url = null;
-                      StorageReference ref = FirebaseStorage.instance
-                          .ref()
-                          .child(
-                              "product_pics/$prod_Id/images/img0_512x512.jpg");
-                      await Future.delayed(const Duration(seconds: 2), () {});
-                      try {
-                        await ref
-                            .getDownloadURL()
-                            .then((value) => {url = value.toString()})
-                            .catchError((error) async => {
-                                  await Future.delayed(
-                                      const Duration(seconds: 2), () {}),
-                                  await ref
-                                      .getDownloadURL()
-                                      .then((value) => {url = value.toString()})
-                                      .catchError((error) async => {
-                                            await Future.delayed(
-                                                const Duration(seconds: 5),
-                                                () {}),
-                                            url = (await ref.getDownloadURL())
-                                                .toString()
-                                          })
-                                });
-                      } on Exception catch (_) {
-                        print('never reached');
-                      }
-
-                      return url;
-                    }
-
-                    if (data.saveAndValidate()) {
-                      await pr.show();
-                      for (var i = 0; i < _images.length; i++) {
-                        await addImageToFirebase(i, _images[i]);
-                      }
-                      imgurl = await getUrl();
-                      print(_fbKey.currentState.value);
-                      await Firestore.instance
-                          .collection('products')
-                          .document("$prod_Id")
-                          .setData({
-                        "title": data.fields['product_name'].currentState.value,
-                        "cato": data.fields['category'].currentState.value,
-                        "price": data.fields['price'].currentState.value,
-                        "s_price":
-                            data.fields['sales_price'].currentState.value,
-                        "image": imgurl,
-                        "s_dis": data.fields['S_dis'].currentState.value,
-                        "f_dis": data.fields['F_dis'].currentState.value,
-                        "color": data.fields['color'].currentState.value,
-                        "del_vech":
-                            data.fields['delivery_vehicle'].currentState.value,
-                      });
-                      await pr.hide();
-                      Navigator.pop(context);
-                    } else {
-                      print('validation failed');
-                      // Firestore.instance
-                      //     .collection('products')
-                      //     .document("there")
-                      //     .setData({
-                      //   "prod_n":
-                      //       data.fields['product_name'].currentState.value,
-                      //   "cato": data.fields['category'].currentState.value,
-                      //   "price": data.fields['price'].currentState.value,
-                      //   "s_price":
-                      //       data.fields['sales_price'].currentState.value,
-                      //   "image": imgurl,
-                      //   // "clr":data.fields['color_picker'].currentState.value,
-                      // });
-                    }
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                child: MaterialButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text(
-                    'Reset',
-                    style: TextStyle(color: Colors.white),
+                    },
                   ),
-                  onPressed: () {
-                    _fbKey.currentState.reset();
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class AttributeDialog extends StatefulWidget {
+  @override
+  _AttributeDialogState createState() => new _AttributeDialogState();
+}
+
+class _AttributeDialogState extends State<AttributeDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Container(
+        color: _c,
+        height: 20.0,
+        width: 20.0,
+      ),
+      actions: <Widget>[
+        FlatButton(
+            child: Text('Switch'),
+            onPressed: () => setState(() {
+                  _c == Colors.redAccent
+                      ? _c = Colors.blueAccent
+                      : _c = Colors.redAccent;
+                }))
+      ],
     );
   }
 }
